@@ -19,11 +19,13 @@ public class TareaController {
         this.asignacionService = asignacionService;
     }
 
-    @GetMapping("/nueva")
-    public String nueva(Model model) {
-        model.addAttribute("asignaciones", asignacionService.listarTodos());
-        return "tareas/nueva";
-    }
+   @GetMapping("/nueva/{asignacionId}")
+public String nuevaPorAsignacion(@PathVariable Long asignacionId, Model model) {
+    model.addAttribute("asignacionId", asignacionId);
+    model.addAttribute("tarea", new Tarea());
+    return "tareas/nueva";
+}
+
 
     @PostMapping("/guardar")
     public String guardar(@RequestParam Long asignacionId,

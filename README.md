@@ -17,16 +17,29 @@ Proyecto de ejemplo para gestión de empleados y proyectos usando Spring Boot, M
    cd CRUDMIXTO
    ```
 
-2. **Configura las credenciales de base de datos:**
+2. **Instala las dependencias:**
+   ```
+   mvnw install
+   ```
+   o si tienes Maven global:
+   ```
+   mvn install
+   ```
+
+3. **Configura las credenciales de base de datos:**
    - Edita el archivo `src/main/resources/application.properties` y ajusta:
      - Usuario y contraseña de MySQL
      - URI de MongoDB Atlas (usuario, contraseña y base de datos)
+   - (Opcional) Puedes usar variables de entorno para mayor seguridad.
 
-3. **Crea la base de datos MySQL:**
+4. **Crea la base de datos MySQL:**
    - Ingresa a tu consola MySQL y ejecuta:
      ```sql
      CREATE DATABASE empresa;
      ```
+
+5. **(Opcional) Importa el proyecto en tu IDE favorito**  
+   (IntelliJ IDEA, Eclipse, VS Code, etc.) como proyecto Maven.
 
 ## Ejecución
 
@@ -49,8 +62,8 @@ Puedes ejecutar la aplicación de dos formas:
 ## Pruebas rápidas
 
 - Accede a la app en tu navegador:
-  - Empleados: [http://localhost:8080/empleados](http://localhost:8080/empleados)
-  - Proyectos: [http://localhost:8080/proyectos](http://localhost:8080/proyectos)
+- Empleados: [http://localhost:8080/empleados](http://localhost:8080/empleados)
+- Proyectos: [](http://localhost:8080/proyectos)
 
 ## Créditos
 
@@ -60,3 +73,11 @@ Puedes ejecutar la aplicación de dos formas:
 
 ---
 ¡Listo para usar y modificar según tus necesidades!
+
+## Intenciones / Funcionalidades
+
+- Gestión de empleados (CRUD completo, búsqueda, exportar a Excel/PDF)
+- Gestión de proyectos (CRUD completo, búsqueda, cambio de estado)
+- Integración con MySQL (empleados) y MongoDB Atlas (proyectos)
+- Interfaz web con Thymeleaf y Bootstrap
+- Seguridad básica con CSRF en formularios
