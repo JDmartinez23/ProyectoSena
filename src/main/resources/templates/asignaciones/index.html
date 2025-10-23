@@ -7,46 +7,79 @@
 <body>
 <section class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">Lista de Asignaciones</h2>
-        <a th:href="@{/asignaciones/nueva}" class="btn btn-success">+ Nueva Asignación</a>
+        <h2 class="text-primary">📋 Lista de Asignaciones</h2>
+        <a th:href="@{/asignaciones/nueva}" class="btn btn-success">
+            + Nueva Asignación
+        </a>
     </div>
 
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Empleado</th>
-                <th>Proyecto</th>
-                <th>Tareas</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="asig : ${asignaciones}">
-                <td th:text="${asig.id}"></td>
-                <td th:text="${empleadoMap[asig.empleadoId]}"></td>
-                <td th:text="${proyectoMap[asig.proyectoId]}"></td>
-                <td>
-                    <ul class="list-unstyled">
-                        <li th:each="t : ${asig.tareas}">
-                            <span th:text="${t.descripcion}"></span> -
-                            <span th:text="${t.estado}"></span>
-                            <a th:href="@{'/tareas/completar/' + ${t.id}}" class="btn btn-sm btn-success">Completar</a>
-                            <form th:action="@{'/tareas/eliminar/' + ${t.id}}" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
-                            </form>
-                        </li>
-                    </ul>
-                    <a th:href="@{'/tareas/nueva/' + ${asig.id}}" class="btn btn-sm btn-primary mt-1">+ Nueva Tarea</a>
-                </td>
-                <td>
-                    <form th:action="@{'/asignaciones/eliminar/' + ${asig.id}}" method="post">
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive shadow rounded">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Empleado</th>
+                    <th>Proyecto</th>
+                    <th>Tareas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="asig : ${asignaciones}">
+                    <td th:text="${asig.id}"></td>
+                    <td th:text="${empleadoMap[asig.empleadoId]}"></td>
+                    <td th:text="${proyectoMap[asig.proyectoId]}"></td>
+
+                    <td>
+                        <ul class="list-group list-group-flush">
+                            <li th:each="t : ${asig.tareas}" class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="fw-bold" th:text="${t.descripcion}"></span>
+                                        <span class="badge"
+                                              th:classappend="${t.estado == 'Completada'} ? 'bg-success' : 'bg-warning text-dark'"
+                                              th:text="${t.estado}"></span>
+                                    </div>
+
+                                    <div class="d-flex gap-1">
+                                        <!-- ✅ Formulario POST para Completar -->
+                                        <form th:action="@{'/tareas/completar/' + ${t.id}}" method="post">
+                                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                                ✅ Completar
+                                            </button>
+                                        </form>
+
+                                        <!-- Eliminar -->
+                                        <form th:action="@{'/tareas/eliminar/' + ${t.id}}" method="post">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                🗑 Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="mt-2">
+                            <a th:href="@{'/tareas/nueva/' + ${asig.id}}" 
+                               class="btn btn-primary btn-sm w-100">
+                                ➕ Nueva Tarea
+                            </a>
+                        </div>
+                    </td>
+
+                    <td>
+                        <form th:action="@{'/asignaciones/eliminar/' + ${asig.id}}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm w-100">
+                                Eliminar Asignación
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </section>
+
 </body>
 </html>
