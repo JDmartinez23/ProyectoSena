@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(~{::title}, ~{::section})">
+<head>
+  <title>Detalle Empleado</title>
+</head>
+<body>
+<section>
+  <h2 class="mb-3">Detalle del empleado</h2>
+
+  <ul class="list-group">
+    <li class="list-group-item"><strong>ID:</strong> <span th:text="${empleado.id}"></span></li>
+    <li class="list-group-item"><strong>Nombre:</strong> <span th:text="${empleado.nombre}"></span></li>
+    <li class="list-group-item"><strong>Email:</strong> <span th:text="${empleado.email}"></span></li>
+  </ul>
+
+  <div class="mt-3">
+    <a th:href="@{/empleados}" class="btn btn-primary">Volver</a>
+  </div>
+</section>
+</body>
+</html>

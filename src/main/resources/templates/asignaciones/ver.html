@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(~{::title}, ~{::section})">
+<head>
+  <title>Detalle Asignación</title>
+</head>
+<body>
+<section>
+  <h2 class="mb-3">Detalle de la asignación</h2>
+
+  <ul class="list-group">
+    <li class="list-group-item"><strong>ID:</strong> <span th:text="${asignacion.id}"></span></li>
+    <li class="list-group-item"><strong>Empleado:</strong> <span th:text="${asignacion.empleadoId}"></span></li>
+    <li class="list-group-item"><strong>Proyecto:</strong> <span th:text="${asignacion.proyectoId}"></span></li>
+  </ul>
+
+  <div class="mt-3">
+    <a th:href="@{/asignaciones}" class="btn btn-primary">Volver</a>
+  </div>
+</section>
+</body>
+</html>

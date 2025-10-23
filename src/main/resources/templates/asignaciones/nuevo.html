@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(~{::title}, ~{::section})">
+<head>
+    <title>Nueva Asignación</title>
+</head>
+<body>
+<section>
+    <h2>Asignar Proyecto a Empleado</h2>
+
+    <form th:action="@{/asignaciones/guardar}" method="post">
+        <!-- CSRF , error al crear-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Empleado</label>
+            <select name="empleadoId" class="form-select" required>
+                <option value="">Seleccione...</option>
+                <option th:each="emp : ${empleados}"
+                        th:value="${emp.id}"
+                        th:text="${emp.nombre}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Proyecto</label>
+            <select name="proyectoId" class="form-select" required>
+                <option value="">Seleccione...</option>
+                <option th:each="proy : ${proyectos}"
+                        th:value="${proy.id}"
+                        th:text="${proy.nombre}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a th:href="@{/asignaciones}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</section>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout(~{::title}, ~{::section})">
+<head>
+    <title>Asignaciones</title>
+</head>
+<body>
+<section>
+    <h2>Lista de Asignaciones</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Empleado</th>
+                <th>Proyecto</th>
+                <th>Tareas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="asig : ${asignaciones}">
+                <td th:text="${asig.id}"></td>
+                <td th:text="${empleadoMap[asig.empleadoId]}"></td>
+                <td th:text="${proyectoMap[asig.proyectoId]}"></td>
+                <td>
+                    <!-- Listar tareas de la asignación -->
+                    <ul>
+                        <li th:each="t : ${asig.tareas}">
+                            <span th:text="${t.nombre}"></span> - 
+                            <span th:text="${t.estado}"></span>
+                            <a th:href="@{'/tareas/completar/' + ${t.id}}" 
+                               class="btn btn-sm btn-success">Completar</a>
+                            <form th:action="@{'/tareas/eliminar/' + ${t.id}}" 
+                                  method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </li>
+                    </ul>
+                    <a th:href="@{'/tareas/nueva/' + ${asig.id}}" 
+                       class="btn btn-sm btn-primary">+ Nueva Tarea</a>
+                </td>
+                <td>
+                    <form th:action="@{'/asignaciones/eliminar/' + ${asig.id}}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
