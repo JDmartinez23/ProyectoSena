@@ -5,25 +5,38 @@
     <title>Nuevo Proyecto</title>
 </head>
 <body>
-<section>
-    <h2>Registrar Proyecto</h2>
+<section class="container mt-4">
+    <h2 class="mb-4 text-center" th:text="${proyecto.id} != null ? 'Editar Proyecto' : 'Nuevo Proyecto'"></h2>
 
-    <form th:action="@{/proyectos/guardar}" th:object="${proyecto}" method="post">
-        <!-- CSRF -->
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <form th:action="@{/proyectos/guardar}" th:object="${proyecto}" method="post" class="border rounded p-4 shadow-sm bg-light">
+        <input type="hidden" th:field="*{id}">
 
         <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" th:field="*{nombre}" class="form-control" required/>
+            <label class="form-label fw-bold">Nombre del Proyecto</label>
+            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Ingrese el nombre del proyecto" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea th:field="*{descripcion}" class="form-control" rows="3"></textarea>
+            <label class="form-label fw-bold">Descripción</label>
+            <textarea th:field="*{descripcion}" class="form-control" rows="3" placeholder="Breve descripción..." required></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <a th:href="@{/proyectos}" class="btn btn-secondary">Cancelar</a>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Estado</label>
+            <select th:field="*{estado}" class="form-select">
+                <option value="Pendiente">Pendiente</option>
+                <option value="Completado">Completado</option>
+            </select>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+            <a th:href="@{/proyectos}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Cancelar
+            </a>
+        </div>
     </form>
 </section>
 </body>

@@ -37,37 +37,50 @@ public class ProyectoController {
     }
 
     // ✅ Cambiar estado de un proyecto
-@PostMapping("/cambiarEstado/{id}")
-public String cambiarEstado(@PathVariable String id) {
-    var proyectoOpt = service.buscarPorId(id);
-    if (proyectoOpt.isPresent()) {
-        var proyecto = proyectoOpt.get();
-        // Si está "Pendiente", lo pasamos a "Completado". Si no, a "Pendiente".
-        if ("Pendiente".equalsIgnoreCase(proyecto.getEstado())) {
-            proyecto.setEstado("Completado");
-        } else {
-            proyecto.setEstado("Pendiente");
+    @PostMapping("/cambiarEstado/{id}")
+    public String cambiarEstado(@PathVariable String id) {
+        var proyectoOpt = service.buscarPorId(id);
+        if (proyectoOpt.isPresent()) {
+            var proyecto = proyectoOpt.get();
+            proyecto.setEstado(
+                    "Pendiente".equalsIgnoreCase(proyecto.getEstado())
+                            ? "Completado"
+                            : "Pendiente"
+            );
+            service.guardar(proyecto);
         }
-        service.guardar(proyecto);
+        return "redirect:/proyectos";
     }
-    return "redirect:/proyectos"; // 👈 vuelve al listado
-}
 
-
-    // ✅ Nuevo proyecto
+    // ✅ Formulario para nuevo proyecto
     @GetMapping("/nuevo")
     public String nuevoForm(Model model) {
         model.addAttribute("proyecto", new Proyecto());
         return "proyectos/nuevo";
     }
 
-    // ✅ Guardar proyecto
+    // ✅ Guardar o actualizar proyecto
     @PostMapping("/guardar")
     public String guardar(@Valid @ModelAttribute("proyecto") Proyecto proyecto,
                           BindingResult br) {
         if (br.hasErrors()) {
             return "proyectos/nuevo";
         }
+
+        // 🔧 Si el proyecto ya existe, actualizarlo
+        if (proyecto.getId() != null && !proyecto.getId().isBlank()) {
+            var existente = service.buscarPorId(proyecto.getId());
+            if (existente.isPresent()) {
+                Proyecto p = existente.get();
+                p.setNombre(proyecto.getNombre());
+                p.setDescripcion(proyecto.getDescripcion());
+                p.setEstado(proyecto.getEstado());
+                service.guardar(p);
+                return "redirect:/proyectos";
+            }
+        }
+
+        // 🔧 Si no tiene ID, crear nuevo
         service.guardar(proyecto);
         return "redirect:/proyectos";
     }
