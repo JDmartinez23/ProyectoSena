@@ -37,10 +37,19 @@
                 <li class="nav-item"><a class="nav-link" href="/proyectos">Proyectos</a></li>
                 <li class="nav-item"><a class="nav-link" href="/empleados">Empleados</a></li>
                 <li class="nav-item"><a class="nav-link" href="/asignaciones">Asignaciones</a></li>
-                <li class="nav-item"><a class="nav-link text-white btn btn-warning ms-2" href="/migrar"style="border-radius: 8px; font-weight: bold;">🔄 Migrar Datos</a></li>
+                
 
             </ul>
         </div>
+        
+        <div class="text-center mt-4">
+            <h2>Gestión de Datos</h2>
+            <p>Puedes migrar los datos de empleados y proyectos desde los archivos fuente.</p>
+            <form th:action="@{/migration/ejecutar}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-success btn-lg">🚀 Migrar Datos</button>
+        </form>
+        </div>
+
     </div>
 </nav>
 

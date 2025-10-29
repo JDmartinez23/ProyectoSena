@@ -32,49 +32,40 @@ public class SqlExcelImporter {
     private void importarDesdeSql(String ruta) throws IOException {
         Path path = Paths.get(ruta);
         if (!Files.exists(path)) {
-            System.out.println("⚠️ Archivo SQL no encontrado en: " + ruta);
+            System.out.println("⚠️ Archivo SQL no encontrado: " + ruta);
             return;
         }
 
-        List<String> lineas = Files.readAllLines(path);
-        for (String linea : lineas) {
-            if (linea.trim().toUpperCase().startsWith("INSERT")) {
-                String[] valores = linea.split("\\(")[1].split("\\)")[0].split(",");
-                if (valores.length >= 3) {
-                    Proyecto proyecto = new Proyecto();
-                    proyecto.setNombre(valores[0].replace("'", "").trim());
-                    proyecto.setDescripcion(valores[1].replace("'", "").trim());
-                    proyecto.setEstado(valores[2].replace("'", "").trim());
-                    proyectoRepository.save(proyecto);
+        String sql = Files.readString(path);
+        String[] inserts = sql.split(";");
+        for (String insert : inserts) {
+            if (insert.trim().toLowerCase().startsWith("insert")) {
+                Proyecto p = new Proyecto();
+                // ejemplo: INSERT INTO proyectos (nombre, descripcion) VALUES ('Proyecto 1', 'Descripción 1');
+                String valores = insert.substring(insert.indexOf("VALUES") + 6)
+                        .replaceAll("[()']", "").replace(";", "").trim();
+                String[] campos = valores.split(",");
+                if (campos.length >= 2) {
+                    p.setNombre(campos[0].trim());
+                    p.setDescripcion(campos[1].trim());
                 }
+                proyectoRepository.save(p);
             }
         }
-        System.out.println("✅ Proyectos importados desde SQL correctamente.");
     }
 
     private void importarDesdeExcel(String ruta) throws IOException {
-        Path path = Paths.get(ruta);
-        if (!Files.exists(path)) {
-            System.out.println("⚠️ Archivo Excel no encontrado en: " + ruta);
-            return;
-        }
-
         try (FileInputStream fis = new FileInputStream(ruta);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // saltar cabecera
-
                 Proyecto p = new Proyecto();
                 p.setNombre(row.getCell(0).getStringCellValue());
                 p.setDescripcion(row.getCell(1).getStringCellValue());
-                if (row.getCell(2) != null)
-                    p.setEstado(row.getCell(2).getStringCellValue());
-
                 proyectoRepository.save(p);
             }
         }
-        System.out.println("✅ Proyectos importados desde Excel correctamente.");
     }
 }
